@@ -45,7 +45,32 @@ function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
 document.getElementById('leaf').onchange=e=>{let f=e.target.files[0];if(f){let im=document.getElementById('preview');im.src=URL.createObjectURL(f);im.style.display='block'}};
 function analyze(){let f=document.getElementById('leaf').files[0],r=document.getElementById('dresult');r.hidden=false;r.textContent=f?'Image uploaded. Model not connected in this prototype.':'Please upload a leaf image first.'}
-function recommend(){let s=document.getElementById('season').value,w=document.getElementById('water').value,soil=document.getElementById('soil').value;let c=s==='Rabi'?['Wheat','Mustard','Chickpea']:s==='Kharif'?['Maize','Cotton','Paddy']:['Moong','Vegetables','Fodder'];if(w!=='Good')c=c.filter(x=>x!=='Paddy');let r=document.getElementById('cropresult');r.hidden=false;r.innerHTML='<b>Illustrative options for '+soil+' soil:</b><p>'+c.join(' • ')+'</p>'}
+function recommend(){async function recommend() {
+  const season = document.getElementById("season").value;
+  const water = document.getElementById("water").value;
+  const soil = document.getElementById("soil").value;
+  const result = document.getElementById("cropresult");
+
+  result.hidden = false;
+  result.innerHTML = "Getting crop recommendations...";
+
+  try {
+    const data = await callAPI("/recommend-crops", {
+      state: "Punjab",
+      soil_type: soil,
+      water: water,
+      season: season
+    });
+
+    result.innerHTML =
+      "<b>Suggested crops:</b> " +
+      data.suggestions.map(c => escapeHtml(c)).join(", ") +
+      "<p>" + escapeHtml(data.notice || "") + "</p>";
+  } catch (error) {
+    result.innerHTML =
+      "Could not get recommendations. Please try again.";
+  }
+} }
 function calculate(){let a=+area.value,y=+yield.value,p=+price.value,c=+cost.value,rev=a*y*p,tc=a*c,pr=rev-tc,mar=rev?100*pr/rev:0,fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');let r=document.getElementById('presult');r.hidden=false;r.innerHTML='<b>Estimated net profit: '+fmt(pr)+'</b><p>Revenue: '+fmt(rev)+'<br>Total costs: '+fmt(tc)+'<br>Profit margin: '+mar.toFixed(1)+'%</p>'}
 
 
