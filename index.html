@@ -67,5 +67,17 @@ function addBenefit(){
 function updateBenefit(i,status){const items=getBenefits();if(items[i]){items[i].status=status;items[i].date=new Date().toISOString().slice(0,10);setBenefits(items)}}
 function removeBenefit(i){const items=getBenefits();items.splice(i,1);setBenefits(items)}
 renderBenefits();
+const API_URL = "https://kisanprofit-ai-api.onrender.com";
+
+async function callAPI(endpoint, data) {
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) throw new Error("API request failed");
+  return response.json();
+}
 </script>
 </body></html>
