@@ -45,14 +45,14 @@ function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
 document.getElementById('leaf').onchange=e=>{let f=e.target.files[0];if(f){let im=document.getElementById('preview');im.src=URL.createObjectURL(f);im.style.display='block'}};
 function analyze(){let f=document.getElementById('leaf').files[0],r=document.getElementById('dresult');r.hidden=false;r.textContent=f?'Image uploaded. Model not connected in this prototype.':'Please upload a leaf image first.'}
-function recommend(){async  function recommend() {
+function recommend(){async function recommend() {
   const season = document.getElementById("season").value;
   const water = document.getElementById("water").value;
   const soil = document.getElementById("soil").value;
   const result = document.getElementById("cropresult");
 
   result.hidden = false;
-  result.innerHTML = "Getting crop recommendations...";
+  result.textContent = "Getting crop recommendations...";
 
   try {
     const response = await fetch(
@@ -63,22 +63,25 @@ function recommend(){async  function recommend() {
         body: JSON.stringify({
           state: "Punjab",
           season: season,
-          soil_type: soil,
-          water: water
+          water: water,
+          soil_type: soil
         })
       }
     );
 
-    if (!response.ok) throw new Error("API request failed");
+    if (!response.ok) {
+      throw new Error("API error: " + response.status);
+    }
 
     const data = await response.json();
-
     result.innerHTML =
-      "<b>Recommended crops:</b><ul>" +
-      data.suggestions.map(crop => "<li>" + crop + "</li>").join("") +
-      "</ul><small>" + data.notice + "</small>";
+      "<b>Suggested crops:</b> " +
+      data.suggestions.join(", ") +
+      "<br><small>" + (data.notice || "") + "</small>";
   } catch (error) {
-    result.innerHTML = "Could not get recommendations. Please try again.";
+    result.textContent =
+      "Could not get recommendations. Please try again.";
+    console.error(error);
   }
 }}
 function calculate(){let a=+area.value,y=+yield.value,p=+price.value,c=+cost.value,rev=a*y*p,tc=a*c,pr=rev-tc,mar=rev?100*pr/rev:0,fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');let r=document.getElementById('presult');r.hidden=false;r.innerHTML='<b>Estimated net profit: '+fmt(pr)+'</b><p>Revenue: '+fmt(rev)+'<br>Total costs: '+fmt(tc)+'<br>Profit margin: '+mar.toFixed(1)+'%</p>'}
