@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KisanProfit AI</title>
+<style>
+:root{--green:#245b38;--light:#edf5e8;--bg:#f6f8f3}*{box-sizing:border-box}body{margin:0;font:16px system-ui;background:var(--bg);color:#183b28}header{background:var(--green);color:white;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}header b{font-size:21px}nav{display:flex;gap:8px;flex-wrap:wrap}button{border:0;border-radius:9px;padding:10px 13px;background:#e8f1e4;color:#214c30;font-weight:700;cursor:pointer}nav button{background:#ffffff20;color:white}nav button.active{background:#fff;color:var(--green)}main{max-width:1000px;margin:auto;padding:22px}.page{display:none}.page.active{display:block}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px;margin:16px 0}.card{background:white;border:1px solid #e1e9dd;border-radius:14px;padding:18px}.metric{font-size:25px;font-weight:800;margin:8px 0}.muted{color:#687c6b;font-size:13px}.banner{background:#e1efd8;padding:20px;border-radius:15px;margin:15px 0}.field{display:block;margin:13px 0;font-weight:650;font-size:14px}.field input,.field select{display:block;width:100%;padding:11px;border:1px solid #d4dfd1;border-radius:9px;margin-top:6px;background:white}input[type=file]{padding:8px}.result{background:#edf5e8;padding:14px;border-radius:10px;margin-top:14px}.notice{font-size:12px;color:#718171;line-height:1.5}h1{font-size:26px}h2{font-size:19px}@media(max-width:550px){main{padding:14px}header{padding:14px}}
+</style>
+</head>
+<body>
+<header><b>🌱 KisanProfit AI</b><nav>
+<button class="active" data-page="home">Dashboard</button><button data-page="doctor">Crop Doctor</button><button data-page="advisor">Crop Advisor</button><button data-page="profit">Profit Calculator</button><button data-page="services">Loans & Services</button><button data-page="benefits">Benefits Tracker</button>
+</nav></header>
+<main>
+<section id="home" class="page active"><h1>Namaste, Farmer! 👋</h1><p class="muted">Smart farming • Better harvests • Demo prototype</p><div class="banner"><h2>Grow smarter. Earn better.</h2><p>Make informed crop and farm-management decisions.</p><button onclick="go('profit')">Calculate farm profit →</button></div>
+<div class="cards"><div class="card"><div class="muted">Farm area</div><div class="metric">5 acres</div><div class="muted">Sample farm</div></div><div class="card"><div class="muted">Current crop</div><div class="metric">Wheat 🌾</div><div class="muted">Demo season</div></div><div class="card"><div class="muted">Estimated profit</div><div class="metric">₹42,000</div><div class="muted">Illustrative only</div></div></div><div class="card"><h2>Quick actions</h2><button onclick="go('doctor')">📷 Check leaf</button> <button onclick="go('advisor')">🌱 Find a crop</button> <button onclick="go('services')">🏦 Farmer services</button></div></section>
+<section id="doctor" class="page"><div class="card"><h1>AI Crop Doctor</h1><p>Upload a leaf photo to test the interface.</p><label class="field">Leaf image<input id="leaf" type="file" accept="image/*"></label><img id="preview" style="display:none;max-width:100%;max-height:260px"><p><button onclick="analyze()">Analyze leaf (demo)</button></p><div id="dresult" class="result" hidden></div><p class="notice">Disease identification is not connected yet. A validated model and expert review are required before real use.</p></div></section>
+<section id="advisor" class="page"><div class="card"><h1>Crop Advisor</h1><label class="field">Season<select id="season"><option>Rabi</option><option>Kharif</option><option>Zaid</option></select></label><label class="field">Soil type<select id="soil"><option>Loamy</option><option>Clay</option><option>Sandy</option><option>Black soil</option></select></label><label class="field">Water availability<select id="water"><option>Good</option><option>Limited</option><option>Rainfed</option></select></label><button onclick="recommend()">Suggest crops</button><div id="cropresult" class="result" hidden></div><p class="notice">Illustrative suggestions only. Validate with local agronomists, soil tests, weather and market data.</p></div></section>
+<section id="profit" class="page"><div class="card"><h1>Profit Calculator</h1><div class="cards"><label class="field">Area (acres)<input id="area" type="number" value="5" min="0"></label><label class="field">Yield (quintals/acre)<input id="yield" type="number" value="18" min="0"></label><label class="field">Price (₹/quintal)<input id="price" type="number" value="2300" min="0"></label><label class="field">Cost per acre (₹)<input id="cost" type="number" value="6600" min="0"></label></div><button onclick="calculate()">Calculate</button><div id="presult" class="result" hidden></div><p class="notice">Enter real farm values. Results are estimates and may omit costs you do not enter.</p></div></section>
+<section id="services" class="page"><div class="card"><h1>Loans & Farmer Services</h1><h2>🏦 Kisan Credit Card (KCC)</h2><p>Ask your bank about eligibility, limits and terms.</p><h2>🛡️ Crop insurance</h2><p>Check current scheme availability and deadlines with official providers.</p><h2>🧑‍🌾 Expert support</h2><p>Contact your local Krishi Vigyan Kendra or agriculture department.</p><button onclick="document.getElementById('checklist').hidden=false">Show document checklist</button><div id="checklist" class="result" hidden>Ask your bank which documents are needed. Common examples include identity/address proof, land or lease records, crop details and bank account information.</div><p class="notice">This demo does not submit loan applications or guarantee eligibility.</p></div></section>
+<section id="benefits" class="page"><div class="card">
+<h1>Government Benefits Tracker</h1>
+<p>Find official scheme portals and keep a personal record of applications, documents and payment updates.</p>
+<div class="banner"><b>Privacy note:</b> This demo stores tracker entries only in this browser on this device. Do not enter Aadhaar, bank account numbers, OTPs or passwords.</div>
+<h2>My tracked benefits</h2><div id="benefitSummary" class="cards"></div><div id="benefitList"></div>
+<hr>
+<h2>Add a benefit to track</h2>
+<label class="field">Scheme<select id="scheme"><option value="PM-KISAN">PM-KISAN — income support</option><option value="KCC">Kisan Credit Card (KCC)</option><option value="PMFBY">PM Fasal Bima Yojana (PMFBY)</option><option value="Other">Other scheme / benefit</option></select></label>
+<label class="field">Application / tracking status<select id="bstatus"><option>Considering</option><option>Documents being prepared</option><option>Applied</option><option>Under verification</option><option>Approved</option><option>Benefit received</option><option>Needs follow-up</option><option>Rejected</option></select></label>
+<label class="field">Date applied or last updated<input id="bdate" type="date"></label>
+<label class="field">Reminder / notes (no sensitive information)<input id="bnotes" maxlength="180" placeholder="e.g. Ask bank about application next week"></label>
+<button onclick="addBenefit()">Save tracker entry</button>
+<p class="notice">Eligibility and approval are decided by the relevant government department, insurer or bank. This tracker is a personal reminder tool, not an official application or live status connection.</p>
+<h2>Official portals</h2>
+<ul>
+<li><a href="https://pmkisan.gov.in/" target="_blank" rel="noopener">PM-KISAN portal</a> — registration and beneficiary status</li>
+<li><a href="https://fasalrin.gov.in/" target="_blank" rel="noopener">Kisan Rin Portal</a> — KCC information and eligibility</li>
+<li><a href="https://pmfby.gov.in/" target="_blank" rel="noopener">PMFBY portal</a> — crop insurance and policy status</li>
+<li><a href="https://www.myscheme.gov.in/" target="_blank" rel="noopener">myScheme</a> — discover government schemes</li>
+</ul>
+</div></section>
+</main>
+<script>
+function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+document.getElementById('leaf').onchange=e=>{let f=e.target.files[0];if(f){let im=document.getElementById('preview');im.src=URL.createObjectURL(f);im.style.display='block'}};
+function analyze(){let f=document.getElementById('leaf').files[0],r=document.getElementById('dresult');r.hidden=false;r.textContent=f?'Image uploaded. Model not connected in this prototype.':'Please upload a leaf image first.'}
+function recommend(){let s=document.getElementById('season').value,w=document.getElementById('water').value,soil=document.getElementById('soil').value;let c=s==='Rabi'?['Wheat','Mustard','Chickpea']:s==='Kharif'?['Maize','Cotton','Paddy']:['Moong','Vegetables','Fodder'];if(w!=='Good')c=c.filter(x=>x!=='Paddy');let r=document.getElementById('cropresult');r.hidden=false;r.innerHTML='<b>Illustrative options for '+soil+' soil:</b><p>'+c.join(' • ')+'</p>'}
+function calculate(){let a=+area.value,y=+yield.value,p=+price.value,c=+cost.value,rev=a*y*p,tc=a*c,pr=rev-tc,mar=rev?100*pr/rev:0,fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');let r=document.getElementById('presult');r.hidden=false;r.innerHTML='<b>Estimated net profit: '+fmt(pr)+'</b><p>Revenue: '+fmt(rev)+'<br>Total costs: '+fmt(tc)+'<br>Profit margin: '+mar.toFixed(1)+'%</p>'}
+
+
+const BENEFIT_KEY='kisanprofit_benefits_v1';
+function getBenefits(){try{return JSON.parse(localStorage.getItem(BENEFIT_KEY)||'[]')}catch(e){return []}}
+function setBenefits(items){localStorage.setItem(BENEFIT_KEY,JSON.stringify(items));renderBenefits()}
+function renderBenefits(){
+ const items=getBenefits(), summary=document.getElementById('benefitSummary'), list=document.getElementById('benefitList');
+ if(!summary||!list)return;
+ const counts={'In progress':items.filter(x=>!['Benefit received','Rejected'].includes(x.status)).length,'Received':items.filter(x=>x.status==='Benefit received').length,'Follow-up':items.filter(x=>x.status==='Needs follow-up').length};
+ summary.innerHTML=Object.entries(counts).map(([k,v])=>`<div class="card"><div class="muted">${k}</div><div class="metric">${v}</div></div>`).join('');
+ list.innerHTML=items.length?items.map((x,i)=>`<div class="card" style="margin:10px 0"><b>${escapeHtml(x.scheme)}</b><p>Status: <strong>${escapeHtml(x.status)}</strong></p><p class="muted">Updated: ${escapeHtml(x.date||'Not set')}</p>${x.notes?`<p>${escapeHtml(x.notes)}</p>`:''}<label class="field">Update status<select onchange="updateBenefit(${i},this.value)">${['Considering','Documents being prepared','Applied','Under verification','Approved','Benefit received','Needs follow-up','Rejected'].map(s=>`<option ${s===x.status?'selected':''}>${s}</option>`).join('')}</select></label><button onclick="removeBenefit(${i})">Remove entry</button></div>`).join(''):'<p class="muted">No benefits tracked yet. Add a scheme below to get started.</p>';
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function addBenefit(){
+ const scheme=document.getElementById('scheme').value,status=document.getElementById('bstatus').value,date=document.getElementById('bdate').value,notes=document.getElementById('bnotes').value.trim();
+ const items=getBenefits();items.push({scheme,status,date,notes});setBenefits(items);document.getElementById('bnotes').value='';
+}
+function updateBenefit(i,status){const items=getBenefits();if(items[i]){items[i].status=status;items[i].date=new Date().toISOString().slice(0,10);setBenefits(items)}}
+function removeBenefit(i){const items=getBenefits();items.splice(i,1);setBenefits(items)}
+renderBenefits();
+</script>
+</body></html>
